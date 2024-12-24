@@ -3,6 +3,7 @@ vti_restartmanual:IX|0
 vti_textextensions:SW|.txt.
 vti_webservertype:SR|diskweb
 vti_defaultlanguage:SR|zh-cn
+vti_scnoprompt:IW|1
 vti_approvalapproved:SR|已批准
 vti_approvaldenied:SR|已拒绝
 vti_timecreated:TR|24 Dec 2024 14:00:25 -0000

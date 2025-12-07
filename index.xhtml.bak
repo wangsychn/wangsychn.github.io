@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html
+  xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="zh-cn">
+  <head>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+    <title>KiriKirby 的网络日志: 主页</title>
+    <meta name="author" content="wangsychn" />
+    <meta name="description" content="这是《KiriKirby 的网络日志》网站的主页" />
+    <meta name="keywords" content="index" />
+  </head>
+  <body>
+    <table border="1" width="100%">
+      <tbody>
+        <tr align="center">
+          <td>
+            <h1>KiriKirby 的网络日志   </h1>
+            <div style="text-align: left;">[回到主页]</div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h2>置顶页面</h2>
+            <p>关于我和本站</p>
+            <p>相册画廊</p>
+            <p>我的研究</p>
+            <h2>全部页面</h2>
+            <p>第一篇博客</p>
+            <p><br />
+            </p>
+            <p></p>
+          </td>
+        </tr>
+        <tr align="center">
+          <td>本网站由 KiriKirby 使用 <a href="https://github.com/therealglazou/bluegriffon">BlueGriffon</a>
+            以 xhtml1 规范制作
+            <p><a href="mailto:wangsychn@outlook.com">wangsychn@outlook.com</a></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br />
+    </p>
+  </body>
+</html>

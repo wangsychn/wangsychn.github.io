@@ -18,7 +18,7 @@
           </td>
         </tr>
         <tr>
-          <td style="width: 50%; background-color: white; text-align: left;"><em>请
+          <td style="width: 80%; background-color: white; text-align: left; vertical-align: top;"><em>请
               使用浏览器内置的查找功能搜索文章标题</em><br />
             <h2>置顶页面</h2>
             <p>关于我和本站</p>
@@ -27,10 +27,10 @@
             <h2>全部页面</h2>
             <h3><a id="mozTocId291823" class="mozTocH3"></a>2025/12<br />
             </h3>
-            <p>2025/12/7 第一篇博客</p>
+            <p><a href="1.html">2025/12/7 第一篇博客</a></p>
             <p></p>
           </td>
-          <td style="width: 50%; background-color: white; text-align: right; vertical-align: top;">
+          <td style="width: 20%; background-color: white; text-align: right; vertical-align: top;">
             <p><b>日期索引</b></p>
             <ol id="mozToc">
               <!--mozToc h3 1-->

@@ -141,6 +141,58 @@
         </div>
       </section>
 
+      <section class="section gallery-section" id="gallery" aria-labelledby="gallery-title">
+        <div class="section-inner">
+          <p class="section-kicker" data-i18n="gallery.kicker">Gallery</p>
+          <div class="gallery-heading">
+            <div>
+              <h2 id="gallery-title" data-i18n="gallery.title">サーバーギャラリー</h2>
+              <p class="section-description" data-i18n="gallery.description">UJIMC の雰囲気を紹介するポスターをまとめました。左右のボタンやスワイプで切り替えられます。</p>
+            </div>
+            <p class="gallery-counter" aria-live="polite">
+              <span class="carousel-current">1</span>
+              <span>/</span>
+              <span class="carousel-total">3</span>
+            </p>
+          </div>
+
+          <div class="poster-carousel" data-carousel>
+            <button class="carousel-button carousel-button-prev" type="button" data-carousel-prev>
+              <svg class="fluent-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M14.78 5.22c.3.3.3.77 0 1.06L9.06 12l5.72 5.72a.75.75 0 1 1-1.06 1.06l-6.25-6.25a.75.75 0 0 1 0-1.06l6.25-6.25c.3-.3.77-.3 1.06 0Z"/></svg>
+              <span class="sr-only" data-i18n="gallery.prev">前の画像</span>
+            </button>
+
+            <div class="carousel-viewport">
+              <div class="carousel-track">
+                <figure class="carousel-slide">
+                  <img src="./assets/posters/poster-01.jpg" alt="" loading="lazy" draggable="false" />
+                  <figcaption data-i18n="gallery.poster1">UJIMC 紹介ポスター 1</figcaption>
+                </figure>
+                <figure class="carousel-slide">
+                  <img src="./assets/posters/poster-02.jpg" alt="" loading="lazy" draggable="false" />
+                  <figcaption data-i18n="gallery.poster2">UJIMC 紹介ポスター 2</figcaption>
+                </figure>
+                <figure class="carousel-slide">
+                  <img src="./assets/posters/poster-03.jpg" alt="" loading="lazy" draggable="false" />
+                  <figcaption data-i18n="gallery.poster3">UJIMC 紹介ポスター 3</figcaption>
+                </figure>
+              </div>
+            </div>
+
+            <button class="carousel-button carousel-button-next" type="button" data-carousel-next>
+              <svg class="fluent-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M9.22 18.78a.75.75 0 0 1 0-1.06L14.94 12 9.22 6.28a.75.75 0 0 1 1.06-1.06l6.25 6.25c.3.3.3.77 0 1.06l-6.25 6.25c-.3.3-.77.3-1.06 0Z"/></svg>
+              <span class="sr-only" data-i18n="gallery.next">次の画像</span>
+            </button>
+          </div>
+
+          <div class="carousel-dots" role="group" data-i18n-aria="gallery.dots">
+            <button type="button" data-carousel-dot="0" data-i18n-aria="gallery.go1"></button>
+            <button type="button" data-carousel-dot="1" data-i18n-aria="gallery.go2"></button>
+            <button type="button" data-carousel-dot="2" data-i18n-aria="gallery.go3"></button>
+          </div>
+        </div>
+      </section>
+
       <section class="section guest-section" id="guest" aria-labelledby="guest-title">
         <div class="section-inner guest-panel">
           <div>

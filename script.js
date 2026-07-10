@@ -39,6 +39,18 @@ const messages = {
     "quick.mail.title": "お問い合わせ",
     "quick.guest.title": "見学アカウント",
     "quick.guest.detail": "まず雰囲気だけ見たい人向け。",
+    "gallery.kicker": "Gallery",
+    "gallery.title": "ポスターギャラリー",
+    "gallery.description": "UJIMC の雰囲気を紹介するポスターをまとめました。左右のボタンやスワイプで切り替えられます。",
+    "gallery.poster1": "UJIMC 紹介ポスター 1",
+    "gallery.poster2": "UJIMC 紹介ポスター 2",
+    "gallery.poster3": "UJIMC 紹介ポスター 3",
+    "gallery.prev": "前の画像",
+    "gallery.next": "次の画像",
+    "gallery.dots": "ポスター切り替え",
+    "gallery.go1": "1枚目のポスターを表示",
+    "gallery.go2": "2枚目のポスターを表示",
+    "gallery.go3": "3枚目のポスターを表示",
     "guest.kicker": "Guest",
     "guest.title": "見学用アカウント",
     "guest.description": "サーバーの雰囲気を確認したい場合は、見学用アカウントでログインできます。通常の参加はホワイトリスト申請後にお願いします。",
@@ -109,6 +121,18 @@ const messages = {
     "quick.mail.title": "联系方式",
     "quick.guest.title": "参观账号",
     "quick.guest.detail": "适合先看看服务器氛围。",
+    "gallery.kicker": "Gallery",
+    "gallery.title": "海报轮播",
+    "gallery.description": "这里收录了 UJIMC 的介绍海报。可以点击左右按钮，也可以在手机上左右滑动切换。",
+    "gallery.poster1": "UJIMC 介绍海报 1",
+    "gallery.poster2": "UJIMC 介绍海报 2",
+    "gallery.poster3": "UJIMC 介绍海报 3",
+    "gallery.prev": "上一张图片",
+    "gallery.next": "下一张图片",
+    "gallery.dots": "切换海报",
+    "gallery.go1": "显示第 1 张海报",
+    "gallery.go2": "显示第 2 张海报",
+    "gallery.go3": "显示第 3 张海报",
     "guest.kicker": "Guest",
     "guest.title": "参观用账号",
     "guest.description": "如果只是想先看看服务器氛围，可以使用参观账号登录。正式游玩请先申请白名单。",
@@ -179,6 +203,18 @@ const messages = {
     "quick.mail.title": "Contact",
     "quick.guest.title": "Guest account",
     "quick.guest.detail": "For taking a quick look before joining.",
+    "gallery.kicker": "Gallery",
+    "gallery.title": "Poster gallery",
+    "gallery.description": "A small poster carousel for UJIMC. Use the arrow buttons or swipe horizontally on mobile.",
+    "gallery.poster1": "UJIMC poster 1",
+    "gallery.poster2": "UJIMC poster 2",
+    "gallery.poster3": "UJIMC poster 3",
+    "gallery.prev": "Previous image",
+    "gallery.next": "Next image",
+    "gallery.dots": "Poster navigation",
+    "gallery.go1": "Show poster 1",
+    "gallery.go2": "Show poster 2",
+    "gallery.go3": "Show poster 3",
     "guest.kicker": "Guest",
     "guest.title": "Guest account",
     "guest.description": "Use the guest account if you only want to look around first. Regular play requires whitelist approval.",
@@ -236,6 +272,10 @@ function applyLanguage(language) {
     const value = dict[item.dataset.i18n];
     if (value) item.textContent = value;
   });
+  document.querySelectorAll("[data-i18n-aria]").forEach((item) => {
+    const value = dict[item.dataset.i18nAria];
+    if (value) item.setAttribute("aria-label", value);
+  });
   languageSelect.value = language;
   localStorage.setItem("ujimc-language", language);
 }
@@ -253,6 +293,79 @@ const initialLanguage = localStorage.getItem("ujimc-language") || "ja";
 applyLinks();
 applyTheme(initialTheme);
 applyLanguage(initialLanguage);
+
+function initCarousel(carousel) {
+  const gallery = carousel.closest(".gallery-section");
+  const viewport = carousel.querySelector(".carousel-viewport");
+  const track = carousel.querySelector(".carousel-track");
+  const slides = [...carousel.querySelectorAll(".carousel-slide")];
+  const dots = [...gallery.querySelectorAll("[data-carousel-dot]")];
+  const currentLabel = gallery.querySelector(".carousel-current");
+  const totalLabel = gallery.querySelector(".carousel-total");
+  const previousButton = carousel.querySelector("[data-carousel-prev]");
+  const nextButton = carousel.querySelector("[data-carousel-next]");
+  let current = 0;
+  let startX = 0;
+  let dragX = 0;
+  let isDragging = false;
+
+  function render(offset = 0) {
+    track.style.transform = `translateX(calc(${-current * 100}% + ${offset}px))`;
+    dots.forEach((dot, index) => {
+      dot.setAttribute("aria-current", String(index === current));
+    });
+    currentLabel.textContent = String(current + 1);
+  }
+
+  function goTo(index) {
+    current = (index + slides.length) % slides.length;
+    render();
+  }
+
+  totalLabel.textContent = String(slides.length);
+  viewport.tabIndex = 0;
+  previousButton.addEventListener("click", () => goTo(current - 1));
+  nextButton.addEventListener("click", () => goTo(current + 1));
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => goTo(Number(dot.dataset.carouselDot)));
+  });
+
+  viewport.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") goTo(current - 1);
+    if (event.key === "ArrowRight") goTo(current + 1);
+  });
+
+  viewport.addEventListener("pointerdown", (event) => {
+    isDragging = true;
+    startX = event.clientX;
+    dragX = 0;
+    viewport.classList.add("is-dragging");
+    viewport.setPointerCapture?.(event.pointerId);
+  });
+
+  viewport.addEventListener("pointermove", (event) => {
+    if (!isDragging) return;
+    dragX = event.clientX - startX;
+    render(dragX);
+  });
+
+  function stopDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    viewport.classList.remove("is-dragging");
+    const threshold = Math.min(110, viewport.clientWidth * 0.22);
+    if (dragX > threshold) goTo(current - 1);
+    else if (dragX < -threshold) goTo(current + 1);
+    else render();
+  }
+
+  viewport.addEventListener("pointerup", stopDrag);
+  viewport.addEventListener("pointercancel", stopDrag);
+  viewport.addEventListener("lostpointercapture", stopDrag);
+  render();
+}
+
+document.querySelectorAll("[data-carousel]").forEach(initCarousel);
 
 languageSelect.addEventListener("change", (event) => {
   applyLanguage(event.target.value);

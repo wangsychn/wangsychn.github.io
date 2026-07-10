@@ -601,15 +601,10 @@ h2 {
     linear-gradient(135deg, var(--vp-c-bg), var(--vp-c-bg-alt));
 }
 
-.gallery-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-}
-
 .gallery-counter {
-  display: inline-flex;
+  display: flex;
+  grid-area: counter;
+  width: max-content;
   min-width: 78px;
   min-height: 44px;
   align-items: center;
@@ -627,11 +622,13 @@ h2 {
 
 .poster-carousel {
   display: grid;
-  grid-template-areas: "prev viewport next";
+  grid-template-areas:
+    ". counter ."
+    "prev viewport next";
   grid-template-columns: 56px minmax(0, 1fr) 56px;
   align-items: center;
   gap: 18px;
-  margin-top: 34px;
+  margin-top: 0;
 }
 
 .carousel-viewport {
@@ -680,13 +677,17 @@ h2 {
   border-radius: 8px;
   object-fit: contain;
   box-shadow: 0 16px 36px rgba(35, 79, 66, 0.16);
+  cursor: zoom-in;
 }
 
 .carousel-slide figcaption {
-  color: var(--vp-c-text-soft);
-  font-size: 0.94rem;
-  font-weight: 800;
-  text-align: center;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .carousel-button {
@@ -742,6 +743,56 @@ h2 {
 .carousel-dots button[aria-current="true"] {
   width: 30px;
   background: var(--vp-c-brand);
+}
+
+.poster-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(79, 213, 154, 0.12), transparent 34%),
+    rgba(10, 14, 18, 0.92);
+  cursor: zoom-out;
+  touch-action: none;
+}
+
+.poster-lightbox[hidden] {
+  display: none;
+}
+
+.poster-lightbox-image {
+  display: block;
+  max-width: min(100%, 980px);
+  max-height: calc(100vh - 86px);
+  border-radius: 8px;
+  object-fit: contain;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.58);
+  user-select: none;
+}
+
+.poster-lightbox-hint {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  max-width: calc(100vw - 32px);
+  margin: 0;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: rgba(255, 255, 255, 0.84);
+  background: rgba(0, 0, 0, 0.34);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+
+body.lightbox-open {
+  overflow: hidden;
 }
 
 .guest-section {
@@ -970,10 +1021,6 @@ h2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .gallery-heading {
-    align-items: start;
-  }
-
   .poster-carousel {
     grid-template-columns: 48px minmax(0, 1fr) 48px;
     gap: 12px;
@@ -1031,16 +1078,13 @@ h2 {
     font-size: 1.08rem;
   }
 
-  .gallery-heading {
-    display: grid;
-  }
-
   .gallery-counter {
-    justify-self: start;
+    justify-self: center;
   }
 
   .poster-carousel {
     grid-template-areas:
+      "counter counter"
       "viewport viewport"
       "prev next";
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1060,6 +1104,19 @@ h2 {
 
   .carousel-slide img {
     max-height: 68vh;
+  }
+
+  .poster-lightbox {
+    padding: 12px;
+  }
+
+  .poster-lightbox-image {
+    max-height: calc(100vh - 74px);
+  }
+
+  .poster-lightbox-hint {
+    width: max-content;
+    font-size: 0.8rem;
   }
 
   .community-action {

@@ -39,9 +39,7 @@ const messages = {
     "quick.mail.title": "お問い合わせ",
     "quick.guest.title": "見学アカウント",
     "quick.guest.detail": "まず雰囲気だけ見たい人向け。",
-    "gallery.kicker": "Gallery",
-    "gallery.title": "ポスターギャラリー",
-    "gallery.description": "UJIMC の雰囲気を紹介するポスターをまとめました。左右のボタンやスワイプで切り替えられます。",
+    "gallery.label": "ポスターギャラリー",
     "gallery.poster1": "UJIMC 紹介ポスター 1",
     "gallery.poster2": "UJIMC 紹介ポスター 2",
     "gallery.poster3": "UJIMC 紹介ポスター 3",
@@ -51,6 +49,8 @@ const messages = {
     "gallery.go1": "1枚目のポスターを表示",
     "gallery.go2": "2枚目のポスターを表示",
     "gallery.go3": "3枚目のポスターを表示",
+    "gallery.lightbox": "拡大表示したポスター",
+    "gallery.lightboxHint": "クリック、下へスワイプ、または戻る操作で閉じます。",
     "guest.kicker": "Guest",
     "guest.title": "見学用アカウント",
     "guest.description": "サーバーの雰囲気を確認したい場合は、見学用アカウントでログインできます。通常の参加はホワイトリスト申請後にお願いします。",
@@ -121,9 +121,7 @@ const messages = {
     "quick.mail.title": "联系方式",
     "quick.guest.title": "参观账号",
     "quick.guest.detail": "适合先看看服务器氛围。",
-    "gallery.kicker": "Gallery",
-    "gallery.title": "海报轮播",
-    "gallery.description": "这里收录了 UJIMC 的介绍海报。可以点击左右按钮，也可以在手机上左右滑动切换。",
+    "gallery.label": "海报轮播",
     "gallery.poster1": "UJIMC 介绍海报 1",
     "gallery.poster2": "UJIMC 介绍海报 2",
     "gallery.poster3": "UJIMC 介绍海报 3",
@@ -133,6 +131,8 @@ const messages = {
     "gallery.go1": "显示第 1 张海报",
     "gallery.go2": "显示第 2 张海报",
     "gallery.go3": "显示第 3 张海报",
+    "gallery.lightbox": "放大的海报",
+    "gallery.lightboxHint": "点击、向下滑动，或使用返回键关闭。",
     "guest.kicker": "Guest",
     "guest.title": "参观用账号",
     "guest.description": "如果只是想先看看服务器氛围，可以使用参观账号登录。正式游玩请先申请白名单。",
@@ -203,9 +203,7 @@ const messages = {
     "quick.mail.title": "Contact",
     "quick.guest.title": "Guest account",
     "quick.guest.detail": "For taking a quick look before joining.",
-    "gallery.kicker": "Gallery",
-    "gallery.title": "Poster gallery",
-    "gallery.description": "A small poster carousel for UJIMC. Use the arrow buttons or swipe horizontally on mobile.",
+    "gallery.label": "Poster gallery",
     "gallery.poster1": "UJIMC poster 1",
     "gallery.poster2": "UJIMC poster 2",
     "gallery.poster3": "UJIMC poster 3",
@@ -215,6 +213,8 @@ const messages = {
     "gallery.go1": "Show poster 1",
     "gallery.go2": "Show poster 2",
     "gallery.go3": "Show poster 3",
+    "gallery.lightbox": "Enlarged poster",
+    "gallery.lightboxHint": "Click, swipe down, or go back to close.",
     "guest.kicker": "Guest",
     "guest.title": "Guest account",
     "guest.description": "Use the guest account if you only want to look around first. Regular play requires whitelist approval.",
@@ -294,6 +294,83 @@ applyLinks();
 applyTheme(initialTheme);
 applyLanguage(initialLanguage);
 
+const lightbox = document.querySelector("[data-poster-lightbox]");
+const lightboxImage = lightbox?.querySelector(".poster-lightbox-image");
+let lightboxHistoryActive = false;
+let lightboxPointerStartY = 0;
+let lightboxPointerMoveY = 0;
+let lightboxDragging = false;
+let ignoreNextLightboxClick = false;
+
+function closePosterLightbox(fromHistory = false) {
+  if (!lightbox || lightbox.hidden) return;
+  if (!fromHistory && lightboxHistoryActive) {
+    history.back();
+    return;
+  }
+  lightbox.hidden = true;
+  lightboxHistoryActive = false;
+  document.body.classList.remove("lightbox-open");
+  lightboxImage.removeAttribute("src");
+  lightboxImage.style.transform = "";
+}
+
+function openPosterLightbox(image) {
+  if (!lightbox || !lightboxImage) return;
+  const caption = image.closest(".carousel-slide")?.querySelector("figcaption")?.textContent.trim() || "";
+  lightboxImage.src = image.currentSrc || image.src;
+  lightboxImage.alt = caption;
+  lightbox.hidden = false;
+  ignoreNextLightboxClick = true;
+  document.body.classList.add("lightbox-open");
+  lightboxImage.style.transform = "";
+  window.setTimeout(() => {
+    ignoreNextLightboxClick = false;
+  }, 120);
+  if (!lightboxHistoryActive) {
+    history.pushState({ ...history.state, posterLightbox: true }, "", location.href);
+    lightboxHistoryActive = true;
+  }
+}
+
+if (lightbox) {
+  lightbox.addEventListener("click", () => {
+    if (ignoreNextLightboxClick) return;
+    if (lightboxPointerMoveY > 6) return;
+    closePosterLightbox();
+  });
+  lightbox.addEventListener("pointerdown", (event) => {
+    lightboxDragging = true;
+    lightboxPointerStartY = event.clientY;
+    lightboxPointerMoveY = 0;
+    lightbox.setPointerCapture?.(event.pointerId);
+  });
+  lightbox.addEventListener("pointermove", (event) => {
+    if (!lightboxDragging) return;
+    lightboxPointerMoveY = Math.max(0, event.clientY - lightboxPointerStartY);
+    lightboxImage.style.transform = `translateY(${Math.min(lightboxPointerMoveY, 120)}px)`;
+  });
+  lightbox.addEventListener("pointerup", () => {
+    lightboxDragging = false;
+    if (lightboxPointerMoveY > 92) closePosterLightbox();
+    else lightboxImage.style.transform = "";
+    window.setTimeout(() => {
+      lightboxPointerMoveY = 0;
+    }, 0);
+  });
+  lightbox.addEventListener("pointercancel", () => {
+    lightboxDragging = false;
+    lightboxImage.style.transform = "";
+    lightboxPointerMoveY = 0;
+  });
+  window.addEventListener("popstate", () => {
+    if (!lightbox.hidden) closePosterLightbox(true);
+  });
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closePosterLightbox();
+  });
+}
+
 function initCarousel(carousel) {
   const gallery = carousel.closest(".gallery-section");
   const viewport = carousel.querySelector(".carousel-viewport");
@@ -308,6 +385,7 @@ function initCarousel(carousel) {
   let startX = 0;
   let dragX = 0;
   let isDragging = false;
+  let dragged = false;
 
   function render(offset = 0) {
     track.style.transform = `translateX(calc(${-current * 100}% + ${offset}px))`;
@@ -337,6 +415,7 @@ function initCarousel(carousel) {
 
   viewport.addEventListener("pointerdown", (event) => {
     isDragging = true;
+    dragged = false;
     startX = event.clientX;
     dragX = 0;
     viewport.classList.add("is-dragging");
@@ -346,17 +425,29 @@ function initCarousel(carousel) {
   viewport.addEventListener("pointermove", (event) => {
     if (!isDragging) return;
     dragX = event.clientX - startX;
+    if (Math.abs(dragX) > 8) dragged = true;
     render(dragX);
   });
 
-  function stopDrag() {
+  function stopDrag(event) {
     if (!isDragging) return;
     isDragging = false;
     viewport.classList.remove("is-dragging");
     const threshold = Math.min(110, viewport.clientWidth * 0.22);
     if (dragX > threshold) goTo(current - 1);
     else if (dragX < -threshold) goTo(current + 1);
-    else render();
+    else {
+      render();
+      const hasPoint = typeof event?.clientX === "number" && typeof event?.clientY === "number";
+      const target = hasPoint ? document.elementFromPoint(event.clientX, event.clientY) : null;
+      const image = target?.closest?.(".carousel-slide img");
+      if (!dragged && image && viewport.contains(image)) {
+        openPosterLightbox(image);
+      }
+    }
+    window.setTimeout(() => {
+      dragged = false;
+    }, 0);
   }
 
   viewport.addEventListener("pointerup", stopDrag);

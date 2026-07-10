@@ -386,6 +386,9 @@ function initCarousel(carousel) {
   let dragX = 0;
   let isDragging = false;
   let dragged = false;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchMoved = false;
 
   function render(offset = 0) {
     track.style.transform = `translateX(calc(${-current * 100}% + ${offset}px))`;
@@ -398,6 +401,12 @@ function initCarousel(carousel) {
   function goTo(index) {
     current = (index + slides.length) % slides.length;
     render();
+  }
+
+  function openImageAtPoint(clientX, clientY) {
+    const target = document.elementFromPoint(clientX, clientY);
+    const image = target?.closest?.(".carousel-slide img");
+    if (image && viewport.contains(image)) openPosterLightbox(image);
   }
 
   totalLabel.textContent = String(slides.length);
@@ -439,11 +448,7 @@ function initCarousel(carousel) {
     else {
       render();
       const hasPoint = typeof event?.clientX === "number" && typeof event?.clientY === "number";
-      const target = hasPoint ? document.elementFromPoint(event.clientX, event.clientY) : null;
-      const image = target?.closest?.(".carousel-slide img");
-      if (!dragged && image && viewport.contains(image)) {
-        openPosterLightbox(image);
-      }
+      if (!dragged && hasPoint) openImageAtPoint(event.clientX, event.clientY);
     }
     window.setTimeout(() => {
       dragged = false;
@@ -453,6 +458,35 @@ function initCarousel(carousel) {
   viewport.addEventListener("pointerup", stopDrag);
   viewport.addEventListener("pointercancel", stopDrag);
   viewport.addEventListener("lostpointercapture", stopDrag);
+  viewport.addEventListener(
+    "touchstart",
+    (event) => {
+      const touch = event.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchMoved = false;
+    },
+    { passive: true },
+  );
+  viewport.addEventListener(
+    "touchmove",
+    (event) => {
+      const touch = event.touches[0];
+      if (Math.abs(touch.clientX - touchStartX) > 8 || Math.abs(touch.clientY - touchStartY) > 8) {
+        touchMoved = true;
+      }
+    },
+    { passive: true },
+  );
+  viewport.addEventListener(
+    "touchend",
+    (event) => {
+      if (touchMoved || !lightbox?.hidden) return;
+      const touch = event.changedTouches[0];
+      if (touch) openImageAtPoint(touch.clientX, touch.clientY);
+    },
+    { passive: true },
+  );
   render();
 }
 

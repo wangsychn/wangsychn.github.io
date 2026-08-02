@@ -1,0 +1,20 @@
+{
+  "servers": [
+    {
+      "name": "International Server 1",
+      "ip": "play.ujimc.cc.cd"
+    },
+    {
+      "name": "International Server 2",
+      "ip": "mc.0-qx.com"
+    },
+    {
+      "name": "China Relay 1",
+      "ip": "154.37.215.143:19139"
+    },
+    {
+      "name": "China Relay 2",
+      "ip": "101.200.241.59:19139"
+    }
+  ]
+}

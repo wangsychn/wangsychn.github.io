@@ -1,7 +1,7 @@
 const LINKS = {
   apply: "https://forms.office.com/r/ZnpXiVBAFJ",
   pack: "./ujimc.zip",
-  map: "http://154.37.215.143:19149/",
+  map: "http://101.200.241.59:19149/",
   discord: "https://discord.gg/ZZjwePyKER",
   qq: "https://qm.qq.com/q/E4zoeNUOCQ",
 };

@@ -466,9 +466,10 @@ h2 {
 
 .server-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   margin-top: 34px;
+  width: min(760px, 100%);
 }
 
 .server-card,
@@ -499,6 +500,14 @@ h2 {
 .primary-server code {
   color: #fff;
   background: rgba(255, 255, 255, 0.18);
+}
+
+.connection-note {
+  width: min(760px, 100%);
+  margin: 16px 0 0;
+  color: var(--vp-c-text-soft);
+  font-size: 0.98rem;
+  font-weight: 700;
 }
 
 .card-label {

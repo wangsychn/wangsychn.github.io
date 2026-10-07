@@ -89,16 +89,36 @@
         <div class="section-inner">
           <p class="section-kicker" data-i18n="connect.kicker">Connection</p>
           <h2 id="connect-title" data-i18n="connect.title">接続情報</h2>
-          <p class="section-description" data-i18n="connect.description">Java 版と Bedrock 版のどちらでも参加できます。バージョンは自由、推奨は Java 26.1.2 です。</p>
+          <p class="section-description" data-i18n="connect.description">Java 版と Bedrock 版のどちらでも参加できます。地域に合った高速な回線を選んで接続してください。</p>
 
           <div class="server-grid">
             <article class="server-card primary-server">
-              <span class="card-label" data-i18n="connect.main.label">通常接続</span>
-              <h3 data-i18n="connect.main.title">Java / Bedrock</h3>
-              <code>play.ujimc.cc.cd</code>
+              <span class="card-label" data-i18n="connect.global1.label">全球线路 1</span>
+              <h3 data-i18n="connect.global1.title">全球线路 1</h3>
+              <div class="endpoint-list"><code>Java&nbsp; java98.142.241.156:19139</code><code>Bedrock&nbsp; be98.142.241.156:19129</code></div>
+            </article>
+            <article class="server-card">
+              <span class="card-label" data-i18n="connect.global2.label">全球线路 2</span>
+              <h3 data-i18n="connect.global2.title">全球线路 2</h3>
+              <div class="endpoint-list"><code>Java&nbsp; java107.172.83.38:29139</code><code>Bedrock&nbsp; be107.172.83.38:29129</code></div>
+            </article>
+            <article class="server-card backup-server">
+              <span class="card-label" data-i18n="connect.backup.label">紧急备用全球线</span>
+              <h3 data-i18n="connect.backup.title">紧急备用全球线</h3>
+              <div class="endpoint-list"><code>Java&nbsp; java38.76.179.147:49139</code><code>Bedrock&nbsp; be38.76.179.147:49129</code></div>
+            </article>
+            <article class="server-card china-server">
+              <span class="card-label" data-i18n="connect.china1.label">中国大陆线 1</span>
+              <h3 data-i18n="connect.china1.title">中国大陆线 1</h3>
+              <div class="endpoint-list"><code>Java&nbsp; java47.109.152.106:29139</code><code>Bedrock&nbsp; be47.109.152.106:29129</code></div>
+            </article>
+            <article class="server-card china-server">
+              <span class="card-label" data-i18n="connect.china2.label">中国大陆线 2</span>
+              <h3 data-i18n="connect.china2.title">中国大陆线 2</h3>
+              <div class="endpoint-list"><code>Java&nbsp; java106.15.47.59:49139</code><code>Bedrock&nbsp; be106.15.47.59:49129</code></div>
             </article>
           </div>
-          <p class="connection-note" data-i18n="connect.china.notice" data-i18n-show="zh" hidden>中国大陆地区有专用线路，请加QQ群了解或者是询问管理人员。</p>
+          <p class="connection-note" data-i18n="connect.note">Java 和 Bedrock 请分别使用对应前缀的地址；优先选择延迟最低的线路，备用线路仅在主线路不可用时使用。</p>
         </div>
       </section>
 
